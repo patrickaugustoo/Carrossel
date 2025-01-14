@@ -8,7 +8,7 @@
     const listagemGeralCategorias = [...document.querySelectorAll('.categoria')];
 
     // Array com as Categorias Visíveis
-    let listagemCategoriasAtiva = [...document.querySelectorAll('[data-slide="ativo"]')];
+    let listagemCategoriasAtivas = [...document.querySelectorAll('[data-slide="ativo"]')];
 
     // Arrays para distinguir e estilizar as Categorias
     let listagemCategoriasGrande = [...document.querySelectorAll('.grande')];
@@ -24,118 +24,89 @@
     // Capturar os Clones anteriores
     let prevClones = [...document.querySelectorAll('[data-slide="prevClone"]')]
 
+    // Quantidade de Clones
+    let listagemClones = listagemGeralCategorias.length - listagemCategoriasAtivas.length;
+
 
 // # Variáveis Importantes:
 
-    // Definir o indíce onde começa as Categorias Ativas
-    // O carrossel começa a partir do index 10 por conta dos clones anteriores para dar o efeito de loop
-    const currentIndex = 10; 
+    // $ Definir o indíce onde começa as Categorias Ativas
+    // O carrossel começa a partir do index 09 por conta dos clones anteriores para dar o efeito de loop
+    let indiceInicial = 10;
+    let indiceFinal = 20;
+
+    // Variável que armazena a quantidade de Categorias Visíveis
+    const visibleCategoriesQntd = indiceFinal - indiceInicial;
+
+    // Define o gap entre os elementos
+    const gapValue = 8;
+
+    // Definir posição inicial do Carrossel em Pixels
+    initialTranslateX = calcularDeslocamento(10);
 
     // Precisamos definir uma variável que vai armazenar o deslocamento do carrossel
-    let currentTranslateX;
+    let currentTranslateX = initialTranslateX;
 
-    // Calcular tamanho de deslocamento inicial do Container
-    let prevClonesWidth = prevClones.reduce((contador, item, index) => {
 
-        let gapValue = 8; // Define o gap entre os elementos
-        const itemWidth = item.getBoundingClientRect().width; // Pega a largura de cada item
-
-        // Realiza a soma de todos items do prevClone colocando 8px de gap
-        return contador + itemWidth + gapValue;
-    }, 0);
-
-    // Atualiza o deslocamento do tranlateX inicialmente após calcular o tamanho dos Clones
-    currentTranslateX = prevClonesWidth; 
-
-    // $ Importante
-    // Variáveis que definem o index do Carrossel
-    let indiceInicial = 9;
-    let indiceFinal = 19;
-
+    // Captura a largura do primeiro item do Carrossel para usar como Cálculo
+    // Necessário duas váriaveis para evitar erro de cálculo
+    let itemReferenceWidthInitial = listagemCategoriasAtivas[0].getBoundingClientRect().width;
+    const itemReferenceWidth = itemReferenceWidthInitial;
 
 // # Métodos & Funções
 
     // Centralizar o carrossel nas Categorias ativas
     containerCategorias.style.transform = `translateX(${-currentTranslateX}px)`;
 
-    // Função para passar para próxima Categoria
+
+    // $ Função para passar para próxima Categoria
     function nextCategoria(){
 
-        // Como o carrossel tem que ir para frente, o valor deve ser negativo
-        deslocamentoCarrossel('direita');
-        
-        // Atualiza os índices de categorias visíveis (atualiza para a próxima parte)
-        indiceInicial++;
-        indiceFinal++;
-
-        // Atualiza listagemCategoriasAtiva
-        listagemCategoriasAtiva = listagemGeralCategorias.slice(indiceInicial, indiceFinal);
-
-        // Atualiza as listas de categorias de acordo com as novas categorias visíveis
-        let listagemCategoriasNormal = [listagemCategoriasAtiva[0], listagemCategoriasAtiva[9]];
-        let listagemCategoriasMedio = [listagemCategoriasAtiva[1], listagemCategoriasAtiva[8]];
-        let listagemCategoriasGrande = listagemCategoriasAtiva.slice(2, 8);
-
-        // Aplica estilos às categorias
-        estilizarCategorias(listagemCategoriasAtiva, listagemCategoriasGrande, listagemCategoriasMedio);
+        setTimeout(() => {
+            verificarIndice('direita');
+        }, 150);
 
     }
 
-    // Função para passar para voltar Categoria
+    // $ Função para passar para voltar Categoria
     function prevCategoria(){
 
-        // Como o carrossel tem que ir para frente, o valor deve ser negativo
-        deslocamentoCarrossel('esquerda');
-        
-        // Atualiza os índices de categorias visíveis (atualiza para a próxima parte)
-        indiceInicial--;
-        indiceFinal--;
+        setTimeout(() => {
+            verificarIndice('esquerda');
+        }, 150);
+
+    }
+
+    // $ Função para Calcular o Deslocamento em Pixels
+    function calcularDeslocamento(indiceReferencia){
+
+        return listagemGeralCategorias
+        .slice(0, indiceReferencia)
+        .reduce((contador, item) => {
+            const itemWidth = item.getBoundingClientRect().width;
+            return contador + itemWidth + gapValue;
+        }, 0);
+
+    }
+
+    function atualizarListagemCategoriasAtivas(indiceInicial, indiceFinal){
 
         // Atualiza listagemCategoriasAtiva
-        listagemCategoriasAtiva = listagemGeralCategorias.slice(indiceInicial, indiceFinal);
+        listagemCategoriasAtivas = listagemGeralCategorias.slice(indiceInicial, indiceFinal);
 
         // Atualiza as listas de categorias de acordo com as novas categorias visíveis
-        let listagemCategoriasNormal = [listagemCategoriasAtiva[0], listagemCategoriasAtiva[9]];
-        let listagemCategoriasMedio = [listagemCategoriasAtiva[1], listagemCategoriasAtiva[8]];
-        let listagemCategoriasGrande = listagemCategoriasAtiva.slice(2, 8);
-
-        // Aplica estilos às categorias
-        estilizarCategorias(listagemCategoriasAtiva, listagemCategoriasGrande, listagemCategoriasMedio);
-        
-    }
-
-    // $ Função responsável pelo deslocamento do Carrossel
-    function deslocamentoCarrossel(sentido) {
-
-        // # Calcular valor de deslocamento
-            // Define o gap entre os elementos
-            let gapValue = 8; 
-
-            // Pega a largura do primeiro item da lista de Categoria Ativa para ter referência
-            let itemReferenceWidth = listagemCategoriasAtiva[0].getBoundingClientRect().width; 
-
-        // Calcular deslocamento total
-        let deslocamentoAtual;
-        if (sentido === 'direita') {
-            deslocamentoAtual = currentTranslateX + itemReferenceWidth + gapValue; // Deslocar para a direita
-        } else {
-            deslocamentoAtual = currentTranslateX - (itemReferenceWidth + gapValue); // Deslocar para a esquerda
-        }
-
-        // Aplica o deslocamento ao container
-        containerCategorias.style.transform = `translateX(${ -deslocamentoAtual }px)`; 
-
-        // Atualiza o deslocamento do translateX conforme o valor calculado
-        currentTranslateX = deslocamentoAtual;
+        listagemCategoriasMedio = [listagemCategoriasAtivas[1], listagemCategoriasAtivas[8]];
+        listagemCategoriasGrande = listagemCategoriasAtivas.slice(2, 8);
 
     }
-
+    
     // $ Função responsável por aplicar estilos CSS nas categorias
-    function estilizarCategorias(listagemCategoriasAtiva, listagemCategoriasGrande, listagemCategoriasMedio) {
+    function estilizarCategorias(animacao) {
 
         // Remove as classes anteriores
-        listagemCategoriasAtiva.forEach( cat => {
+        listagemGeralCategorias.forEach( cat => {
             cat.className = 'categoria'; // Remove qualquer classe anterior
+            cat.style.transition = animacao === true ? 'all 0.3s' : 'none';
         });
 
         // Adiciona as novas classes
@@ -148,6 +119,106 @@
         });
 
     }
+
+    // $ Função responsável pelo deslocamento do Carrossel
+    function deslocarCarrosselNormal(sentido) {
+         
+        // Calcular deslocamento total
+        let deslocamentoAtual;
+        if (sentido === 'direita' && indiceFinal <= listagemGeralCategorias.length) {
+            deslocamentoAtual = currentTranslateX + calcularDeslocamento(1);
+            // Atualiza os índices de categorias visíveis (atualiza para a próxima parte)
+            indiceInicial++;
+            indiceFinal++;
+        } else if (sentido === 'esquerda') {
+            deslocamentoAtual = currentTranslateX - (itemReferenceWidth + gapValue); // Deslocar para a esquerda
+            // Atualiza os índices de categorias visíveis (atualiza para a próxima parte)
+            indiceInicial--;
+            indiceFinal--;
+        }
+
+        // Atualiza as Categorias Ativas e Arrays relacionados
+        atualizarListagemCategoriasAtivas(indiceInicial, indiceFinal);
+
+        // Aplica estilos às categorias
+        estilizarCategorias(true);
+
+        // Aplica o deslocamento ao container
+        containerCategorias.style.transform = `translateX(${ -deslocamentoAtual }px)`; 
+
+        // Atualiza o deslocamento do translateX conforme o valor calculado
+        currentTranslateX = deslocamentoAtual;
+
+        containerCategorias.style.transition = `transform 0.3s`;
+
+        if (indiceFinal == listagemGeralCategorias.length || indiceInicial == 0){
+            containerCategorias.addEventListener('transitionend', manipulartransicao);
+        }
+
+
+    }
+
+    function manipulartransicao(){
+
+        if(indiceFinal == listagemGeralCategorias.length){
+
+            // Aplica o deslocamento ao container
+            containerCategorias.style.transition = `none`;
+            containerCategorias.style.transform = `translateX(${ -initialTranslateX }px)`; 
+            indiceInicial = 10;
+            indiceFinal = 20;
+    
+            // Atualiza as Categorias Ativas e Arrays relacionados
+            atualizarListagemCategoriasAtivas(indiceInicial, indiceFinal);
+    
+            // Aplica estilos às categorias
+            estilizarCategorias(false);
+    
+    
+            // Atualiza o deslocamento do translateX conforme o valor calculado
+            currentTranslateX = initialTranslateX;
+
+        }
+
+        if(indiceInicial == 0){
+
+            // Aplica o deslocamento ao container
+            containerCategorias.style.transition = `none`;
+            containerCategorias.style.transform = `translateX(${ -784 }px)`; 
+            indiceInicial = 14;
+            indiceFinal = 24;
+    
+            // Atualiza as Categorias Ativas e Arrays relacionados
+            atualizarListagemCategoriasAtivas(indiceInicial, indiceFinal);
+    
+            // Aplica estilos às categorias
+            estilizarCategorias(false);
+    
+    
+            // Atualiza o deslocamento do translateX conforme o valor calculado
+            currentTranslateX = 784;
+
+        }
+    
+            containerCategorias.removeEventListener('transitionend', manipulartransicao);
+
+    }
+
+    function verificarIndice(sentido){
+
+        if(indiceInicial == 0) {
+            return deslocarCarrosselNormal(sentido);
+        }
+
+        if(indiceFinal == listagemGeralCategorias.length - 1) {
+            return  deslocarCarrosselNormal(sentido);           
+        }
+
+        deslocarCarrosselNormal(sentido);
+
+    }
+
+
 
     // Evento para avançar
     nextButton.addEventListener('click', nextCategoria);

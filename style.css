@@ -42,7 +42,7 @@ body {
     align-items: center;
     flex-wrap: nowrap;
     gap: 8px;
-    transform: translateX();
+    transform: translateX(0);
     transition: transform 0.5s;
 }
 
@@ -54,7 +54,6 @@ body {
     align-items: center;
     background-color: rgba(165, 42, 42, 0.159);
     border-radius: 50%;
-    transition: all 0.5s;
 }
 
 .grande {
@@ -65,7 +64,6 @@ body {
     align-items: center;
     background-color: rgb(76, 0, 255);
     border-radius: 50%;
-    transition: all 0.5s;
 }
 
 .medio {
@@ -76,5 +74,4 @@ body {
     align-items: center;
     background-color: rgb(255, 0, 0);
     border-radius: 50%;
-    transition: all 0.5s;
 }
