@@ -11,8 +11,12 @@
     let listagemCategoriasAtivas = [...document.querySelectorAll('[data-slide="ativo"]')];
 
     // Arrays para distinguir e estilizar as Categorias
-    let listagemCategoriasGrande = [...document.querySelectorAll('.grande')];
-    let listagemCategoriasMedio = [...document.querySelectorAll('.medio')];
+    let listagemCategoriasTam01;
+    let listagemCategoriasTam02;
+    let listagemCategoriasTam03;
+    let listagemCategoriasTam04;
+    let listagemCategoriasTam05;
+    let listagemCategoriasTam06;
 
     // Pegar o tamanho do Container de Corte
     const containerCorte = document.querySelector(".box-corte");
@@ -33,7 +37,7 @@
     // $ Definir o indíce onde começa as Categorias Ativas
     // O carrossel começa a partir do index 09 por conta dos clones anteriores para dar o efeito de loop
     let indiceInicial = 10;
-    let indiceFinal = 20;
+    let indiceFinal = 21;
 
     // Variável que armazena a quantidade de Categorias Visíveis
     const visibleCategoriesQntd = indiceFinal - indiceInicial;
@@ -95,8 +99,12 @@
         listagemCategoriasAtivas = listagemGeralCategorias.slice(indiceInicial, indiceFinal);
 
         // Atualiza as listas de categorias de acordo com as novas categorias visíveis
-        listagemCategoriasMedio = [listagemCategoriasAtivas[1], listagemCategoriasAtivas[8]];
-        listagemCategoriasGrande = listagemCategoriasAtivas.slice(2, 8);
+        listagemCategoriasTam01 = [listagemCategoriasAtivas[5]];
+        listagemCategoriasTam02 = [listagemCategoriasAtivas[4], listagemCategoriasAtivas[6]];
+        listagemCategoriasTam03 = [listagemCategoriasAtivas[3], listagemCategoriasAtivas[7]];
+        listagemCategoriasTam04 = [listagemCategoriasAtivas[2], listagemCategoriasAtivas[8]];
+        listagemCategoriasTam05 = [listagemCategoriasAtivas[1], listagemCategoriasAtivas[9]];
+        listagemCategoriasTam06 = [listagemCategoriasAtivas[0], listagemCategoriasAtivas[10]];
 
     }
     
@@ -110,13 +118,18 @@
         });
 
         // Adiciona as novas classes
-        listagemCategoriasGrande.forEach( cat => {
-            cat.classList.add('grande'); // Adiciona a classe 'grande'
-        });
+        listagemCategoriasTam01[0].classList.add('tam-01');
+        listagemCategoriasTam02[0].classList.add('tam-02');
+        listagemCategoriasTam02[1].classList.add('tam-02');
+        listagemCategoriasTam03[0].classList.add('tam-03');
+        listagemCategoriasTam03[1].classList.add('tam-03');
+        listagemCategoriasTam04[0].classList.add('tam-04');
+        listagemCategoriasTam04[1].classList.add('tam-04');
+        listagemCategoriasTam05[0].classList.add('tam-05');
+        listagemCategoriasTam05[1].classList.add('tam-05');
+        listagemCategoriasTam06[0].classList.add('tam-06');
+        listagemCategoriasTam06[1].classList.add('tam-06');
 
-        listagemCategoriasMedio.forEach( cat => {
-            cat.classList.add('medio'); // Adiciona a classe 'medio'
-        });
 
     }
 
@@ -131,7 +144,7 @@
             indiceInicial++;
             indiceFinal++;
         } else if (sentido === 'esquerda') {
-            deslocamentoAtual = currentTranslateX - (itemReferenceWidth + gapValue); // Deslocar para a esquerda
+            deslocamentoAtual = currentTranslateX - (calcularDeslocamento(1)); // Deslocar para a esquerda
             // Atualiza os índices de categorias visíveis (atualiza para a próxima parte)
             indiceInicial--;
             indiceFinal--;
@@ -148,6 +161,8 @@
 
         // Atualiza o deslocamento do translateX conforme o valor calculado
         currentTranslateX = deslocamentoAtual;
+
+        console.log('indice', indiceInicial);
 
         containerCategorias.style.transition = `transform 0.3s`;
 
@@ -166,7 +181,7 @@
             containerCategorias.style.transition = `none`;
             containerCategorias.style.transform = `translateX(${ -initialTranslateX }px)`; 
             indiceInicial = 10;
-            indiceFinal = 20;
+            indiceFinal = 21;
     
             // Atualiza as Categorias Ativas e Arrays relacionados
             atualizarListagemCategoriasAtivas(indiceInicial, indiceFinal);
@@ -182,11 +197,12 @@
 
         if(indiceInicial == 0){
 
+            console.log('ativado loop');
             // Aplica o deslocamento ao container
             containerCategorias.style.transition = `none`;
-            containerCategorias.style.transform = `translateX(${ -784 }px)`; 
+            containerCategorias.style.transform = `translateX(${ -532 }px)`; 
             indiceInicial = 14;
-            indiceFinal = 24;
+            indiceFinal = 25;
     
             // Atualiza as Categorias Ativas e Arrays relacionados
             atualizarListagemCategoriasAtivas(indiceInicial, indiceFinal);
@@ -196,7 +212,9 @@
     
     
             // Atualiza o deslocamento do translateX conforme o valor calculado
-            currentTranslateX = 784;
+            currentTranslateX = 532;
+
+            console.log(calcularDeslocamento(14));
 
         }
     
