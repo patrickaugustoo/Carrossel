@@ -10,6 +10,11 @@
     // Array com as Categorias Visíveis
     let listagemCategoriasAtivas = [...document.querySelectorAll('[data-slide="ativo"]')];
 
+    // Array com as Categorias Inativas
+    let listagemCategoriasInativas = listagemGeralCategorias.filter(categoria => 
+        !listagemCategoriasAtivas.includes(categoria)
+    );
+
     // Arrays para distinguir e estilizar as Categorias
     let listagemCategoriasTam01;
     let listagemCategoriasTam02;
@@ -111,11 +116,29 @@
     // $ Função responsável por aplicar estilos CSS nas categorias
     function estilizarCategorias(animacao) {
 
+        // Verifica os itens "inativos"
+        listagemCategoriasInativas = listagemGeralCategorias.filter(categoria => 
+            !listagemCategoriasAtivas.includes(categoria)
+        );
+
         // Remove as classes anteriores
         listagemGeralCategorias.forEach( cat => {
-            cat.className = 'categoria'; // Remove qualquer classe anterior
-            cat.style.transition = animacao === true ? 'all 0.3s' : 'none';
+
+                cat.className = ""; // Remove qualquer classe anterior
+                cat.style.transition = animacao === true ? 'all 0.3s' : 'none';
+
         });
+
+        // Adiciona a classe base
+        listagemCategoriasInativas.forEach( cat => {
+
+            cat.className = "categoria"; // Remove qualquer classe anterior
+            cat.style.transition = animacao === true ? 'all 0.3s' : 'none';
+
+    });
+
+
+        console.log(listagemCategoriasInativas)
 
         // Adiciona as novas classes
         listagemCategoriasTam01[0].classList.add('tam-01');
